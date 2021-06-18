@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"baseUrl": "./",
+		"sourceMap": true,
+		"inlineSources": true,
+		"declarationMap": true,
+		"target": "es2019",
+		"lib": [
+			"ES2019"
+		],
+		"module": "CommonJS",
+		"noImplicitAny": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowSyntheticDefaultImports": true,
+		"outDir": "./out",
+		"moduleResolution": "node"
+	},
+	"include": [
+		"./src/**/*"
+	],
+	"exclude": [
+		"./original/**/*"
+	]
+}
