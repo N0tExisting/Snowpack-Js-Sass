@@ -36,6 +36,23 @@ jobs:
     needs: build
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14.x
+
+      - name: Install yarn
+        run: npm i -g yarn typescript snowpack
+
+      - name: Install Packages
+        run: yarn
+
+      - name: run typescript
+        run: tsc
+
       - name: Run snowpack
         run: |
           cd {{$GITHUB_WORKSPACE}}/test/valid/
@@ -47,5 +64,22 @@ jobs:
     needs: build
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14.x
+
+      - name: Install yarn
+        run: npm i -g yarn typescript snowpack
+
+      - name: Install Packages
+        run: yarn
+
+      - name: run typescript
+        run: tsc
+
       - name: Run tests
         run: yarn test
