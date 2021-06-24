@@ -21,14 +21,8 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install yarn
-        run: npm i -g yarn typescript snowpack
-
-      - name: Install Packages
-        run: yarn
-
-      - name: run typescript
-        run: tsc
+      - name: Setup & Build
+        run: ./CI.sh
 
 
   snowpack:
@@ -44,19 +38,13 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install yarn
-        run: npm i -g yarn typescript snowpack
-
-      - name: Install Packages
-        run: yarn
-
-      - name: run typescript
-        run: tsc
+      - name: Setup & Build
+        run: ./CI.sh
 
       - name: Run snowpack
         run: |
-          cd {{$GITHUB_WORKSPACE}}/test/valid/
-          snowpack build
+          cd $GITHUB_WORKSPACE/test/valid/
+          yarn build --emoji true
 
 
   test:
@@ -72,14 +60,8 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install yarn
-        run: npm i -g yarn typescript snowpack
-
-      - name: Install Packages
-        run: yarn
-
-      - name: run typescript
-        run: tsc
+      - name: Setup & Build
+        run: ./CI.sh
 
       - name: Run tests
-        run: yarn test
+        run: yarn test --emoji true

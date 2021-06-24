@@ -5,7 +5,8 @@
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",
-    "postinstall": "cd test/fixture && yarn --force && cd ../valid && yarn --force"
+    "test": "jest",
+    "postinstall": "cd test/fixture && yarn --force && cd ../valid && yarn --force --emoji true"
   },
   "license": "LGPL-3.0-or-later",
   "dependencies": {
