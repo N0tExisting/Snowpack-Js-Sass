@@ -1,6 +1,6 @@
 {
   "name": "snowpack-js-sass",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "plugin.js",
   "scripts": {
     "start": "tsc -w",

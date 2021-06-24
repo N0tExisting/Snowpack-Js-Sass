@@ -22,6 +22,12 @@ type pOptions = {
 };
 export default pOptions;
 
+export type NewBuiltFile =
+  snowpack.SnowpackBuiltFile &
+  {
+    contents: Buffer | string
+  }
+;
 export type customCfg = snowpack.SnowpackPlugin & {
   _markImportersAsChanged: (filePath: string) => void;
 }

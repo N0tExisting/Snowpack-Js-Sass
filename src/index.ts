@@ -1,16 +1,18 @@
 // TODO: Smart sass imports like https://github.com/snowpackjs/snowpack/blob/main/plugins/plugin-sass/plugin.js
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import Snowpack, {
+//import * as fs from 'fs'
+const fs = require('fs');
+const os =require('os');
+const path = require('path');
+const Snowpack = require("snowpack");
+const sass = require('sass');
+import {
   SnowpackUserConfig,
   SnowpackConfig,
   SnowpackBuildMap,
   SnowpackBuiltFile,
-  SnowpackPlugin
-} from "snowpack";
-import sass from 'sass';
-import options, { customCfg } from './types'
+  SnowpackPlugin,
+} from 'snowpack';
+import options, { customCfg as customPlug, NewBuiltFile } from './types'
 
 //#region Sass Imports
 
@@ -97,7 +99,7 @@ const GetOutFile = (Path: string): string => {
   return Path.replace(/\.s[ac]ss$/i, ".css")
 }
 
-const plug = function (snowpackConfig: SnowpackUserConfig, pluginOptions: options): customCfg {
+module.exports = function (snowpackConfig: SnowpackUserConfig, pluginOptions: options): customPlug {
   const {root} = snowpackConfig || {};
 
   /** A map of partially resolved imports to the files that imported them. */
@@ -161,34 +163,40 @@ const plug = function (snowpackConfig: SnowpackUserConfig, pluginOptions: option
 
     async load(options): Promise<SnowpackBuildMap> {
       if (options.isDev) {
-        fs.readFile(options.filePath, { encoding: 'utf-8' }, (err, data) => {
-          if ((err !== null || err !== undefined) && data.length > 0) {
-            const sassImports = scanSassImports(data, options.filePath, options.fileExt);
-            [...sassImports].forEach((imp) => addImportsToMap(options.filePath, imp));
-          } else {
-            console.error(`Error reading file ${options.filePath}:`, err);
+        fs.readFile(options.filePath, { encoding: 'utf-8' },
+          (err: NodeJS.ErrnoException, data: string) => {
+            if ((err !== null || err !== undefined) && data.length > 0) {
+              const sassImports = scanSassImports(data, options.filePath, options.fileExt);
+              [...sassImports].forEach((imp) => addImportsToMap(options.filePath, imp));
+            } else {
+              console.error(`Error reading file ${options.filePath}:`, err);
+            }
           }
-        })
+        )
       }
-      const res = sass.renderSync({
+      const scssBase = {
         file: options.filePath,
         omitSourceMapUrl: true,
         sourceMapEmbed: false,
         sourceMapRoot: config.root,
-        ...pluginOptions
-      });
+      };
+      //? There is probably a better way to make sure that certain options aren't wrong.
+      const scssOpts = {
+        ...scssBase,
+        ...pluginOptions,
+        ...scssBase,
+      };
+      const res = sass.renderSync(scssOpts);
       console.log(res);
-      const _file: SnowpackBuiltFile = {
-        code: res.css,
+      const _file: NewBuiltFile = {
+        code: res.css,      //* Old, Keep
+        contents: res.css,  //* NEW, needs compartibilyty fix!
         map: res.map?.toString(),
       };
-      const retVal = {
-        _file
-      };
+      const retVal: SnowpackBuildMap = {};
+      retVal[options.filePath] = _file;
       console.log(retVal);
       return retVal;
     }
   };
 };
-
-module.exports = plug;
