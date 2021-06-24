@@ -48,7 +48,7 @@ jobs:
       - name: Run snowpack
         run: |
           cd $GITHUB_WORKSPACE/test/valid/
-          yarn build --emoji true
+          yarn --emoji true build
 
 
   test:
@@ -70,4 +70,4 @@ jobs:
           ./CI.sh
 
       - name: Run tests
-        run: yarn test --emoji true
+        run: yarn --emoji true test
