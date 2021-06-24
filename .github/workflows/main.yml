@@ -22,7 +22,9 @@ jobs:
           node-version: 14.x
 
       - name: Setup & Build
-        run: ./CI.sh
+        run: |
+          chmod CI.sh
+          ./CI.sh
 
 
   snowpack:
@@ -39,7 +41,9 @@ jobs:
           node-version: 14.x
 
       - name: Setup & Build
-        run: ./CI.sh
+        run: |
+          chmod CI.sh
+          ./CI.sh
 
       - name: Run snowpack
         run: |
@@ -61,7 +65,9 @@ jobs:
           node-version: 14.x
 
       - name: Setup & Build
-        run: ./CI.sh
+        run: |
+          chmod CI.sh
+          ./CI.sh
 
       - name: Run tests
         run: yarn test --emoji true
