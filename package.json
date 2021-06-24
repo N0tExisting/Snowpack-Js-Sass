@@ -5,16 +5,18 @@
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",
-    "postinstall": "cd testFixture && yarn install"
+    "postinstall": "cd test/fixture && yarn --force && cd ../valid && yarn --force"
   },
-  "license": "GNU LGPL",
+  "license": "LGPL-3.0-or-later",
   "dependencies": {
     "sass": "^1.35.1",
     "snowpack": "^3.5.8"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.23",
     "@types/node": "^15.12.3",
     "@types/sass": "^1.16.0",
+    "jest": "^27.0.4",
     "typescript": "^4.3.3"
   }
 }

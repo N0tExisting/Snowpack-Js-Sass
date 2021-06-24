@@ -1,0 +1,20 @@
+{
+  "name": "test-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-postcss": "^1.4.1",
+    "@snowpack/plugin-sass": "^1.4.0",
+    "cssnano": "^5.0.6",
+    "postcss": "^8.3.5",
+    "postcss-cli": "^8.3.1",
+    "postcss-preset-env": "^6.7.0",
+    "snowpack": "^3.5.9"
+  }
+}

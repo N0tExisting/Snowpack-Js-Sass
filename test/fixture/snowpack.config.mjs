@@ -5,7 +5,7 @@ export default  {
 	},
 	plugins: [
 		[
-			'../plugin.js',
+			'../../plugin.js',
 			{
 				verbose: true,
 				sourceMap: true,
