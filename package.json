@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "main": "plugin.js",
   "scripts": {
-    "start": "tsc -w",
-    "build": "tsc",
+    "start": "tsc -p ./ -w",
+    "build": "tsc -p ./",
     "test": "jest",
     "postinstall": "cd test/fixture && yarn --force && cd ../valid && yarn --force --emoji true"
   },
