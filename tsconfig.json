@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"declaration": true,
 		"baseUrl": "./",
-		"sourceMap": true,
+		"inlineSourceMap": true,
 		"inlineSources": true,
 		"declarationMap": true,
 		"target": "es2019",

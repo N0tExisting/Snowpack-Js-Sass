@@ -1,18 +1,21 @@
 // TODO: Smart sass imports like https://github.com/snowpackjs/snowpack/blob/main/plugins/plugin-sass/plugin.js
-//import * as fs from 'fs'
-const fs = require('fs');
-const os =require('os');
-const path = require('path');
-const Snowpack = require("snowpack");
-const sass = require('sass');
-import {
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import * as sass from 'sass';
+import * as snowpack from 'snowpack';
+
+import type {
   SnowpackUserConfig,
   SnowpackConfig,
   SnowpackBuildMap,
-  SnowpackBuiltFile,
-  SnowpackPlugin,
 } from 'snowpack';
-import options, { customCfg as customPlug, NewBuiltFile } from './types'
+import type {
+  plugOptions as options,
+  BetterError,
+  customPlugin as customPlug,
+  NewBuiltFile,
+} from './types';
 
 //#region Sass Imports
 
@@ -92,15 +95,22 @@ function scanSassImports(fileContents: string, filePath: string, fileExt: string
 }
 //#endregion
 
-let config: SnowpackConfig;
-
-const GetOutFile = (Path: string): string => {
-  const pSep = os.platform() === "win32" ? "\\" : "/";
-  return Path.replace(/\.s[ac]ss$/i, ".css")
+const GetOutFile = (config: SnowpackConfig, FilePath: string): string => {
+  // TODO: The output should go into the out dir, but it doesn't.
+  const retVal = path.resolve(
+    __dirname,
+    config.root,
+    config.buildOptions.out,
+    snowpack.getUrlForFile(FilePath, config).replace(/\.s[ac]ss$/, ".css")
+  );
+  console.log(`Converted ${FilePath} to ${retVal}`);
+  return retVal;
 }
 
-module.exports = function (snowpackConfig: SnowpackUserConfig, pluginOptions: options): customPlug {
-  const {root} = snowpackConfig || {};
+let config: SnowpackConfig;
+
+const out = function(_snowpackConfig: SnowpackUserConfig, pluginOptions: options): customPlug {
+  //const {root} = snowpackConfig ?? {};
 
   /** A map of partially resolved imports to the files that imported them. */
   const importedByMap = new Map<string, Set<string>>();
@@ -170,33 +180,41 @@ module.exports = function (snowpackConfig: SnowpackUserConfig, pluginOptions: op
               [...sassImports].forEach((imp) => addImportsToMap(options.filePath, imp));
             } else {
               console.error(`Error reading file ${options.filePath}:`, err);
+              const error: BetterError = new Error(`Error reading file ${options.filePath}`);
+              error.base = err;
+              throw error;
             }
           }
         )
       }
-      const scssBase = {
+      const OutFile = GetOutFile(config, options.filePath);
+      const scssBase: sass.Options = {
+        outFile: OutFile,
         file: options.filePath,
         omitSourceMapUrl: true,
         sourceMapEmbed: false,
         sourceMapRoot: config.root,
       };
       //? There is probably a better way to make sure that certain options aren't wrong.
-      const scssOpts = {
+      const scssOpts: sass.Options = {
         ...scssBase,
         ...pluginOptions,
         ...scssBase,
       };
       const res = sass.renderSync(scssOpts);
-      console.log(res);
+      console.log('Result:', res);
       const _file: NewBuiltFile = {
         code: res.css,      //* Old, Keep
-        contents: res.css,  //* NEW, needs compartibilyty fix!
+        contents: res.css,  //* NEW, needs compatibility fix for typescript!
         map: res.map?.toString(),
       };
       const retVal: SnowpackBuildMap = {};
-      retVal[options.filePath] = _file;
-      console.log(retVal);
+      retVal['.css'] = _file;
+      console.log('Return Value:', retVal);
       return retVal;
     }
   };
 };
+
+module.exports = out;
+export default out;

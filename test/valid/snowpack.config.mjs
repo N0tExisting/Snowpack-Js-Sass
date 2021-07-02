@@ -1,5 +1,5 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
-export default  {
+const __Snowpack_Config__ = {
 	mount: {
 		www: '/'
 	},
@@ -14,3 +14,4 @@ export default  {
 		'@snowpack/plugin-postcss',
 	],
 }
+export default __Snowpack_Config__
