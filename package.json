@@ -8,7 +8,7 @@
     "test": "jest",
     "postinstall": "cd test/fixture && yarn --force && cd ../valid && yarn --force --emoji true"
   },
-  "license": "LGPL-3.0-or-later",
+  "license": "MIT",
   "dependencies": {
     "sass": "^1.35.1",
     "snowpack": "^3.5.8"
