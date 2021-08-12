@@ -14,7 +14,7 @@
     "snowpack": "^3.8.3"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^26.0.24",
     "@types/node": "^15.14.2",
     "@types/sass": "^1.16.0",
     "jest": "^27.0.6",
